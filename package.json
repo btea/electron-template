@@ -1,0 +1,13 @@
+{
+  "name": "electr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "pack": "electron-packager . el --win --out src -arch=x64 --electronVersion 4.0.0 --overwrite --ignore=node_modules"
+  },
+  "author": "",
+  "license": "ISC"
+}

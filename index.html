@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>electron html</title>
+</head>
+<body>
+    <h1>this is a electron</h1>
+    <button class="btn">获取</button>
+    <!-- <script src="./a.js"></script> -->
+    <script>
+        require('./req');
+        var btn = document.getElementsByClassName('btn')[0];
+        btn.addEventListener('click', function(){
+            obtain('get','http://localhost:2333/hot');
+        })
+        function obtain(type, url){
+            var xhr = new XMLHttpRequest();
+            xhr.open(type, url);
+            xhr.send();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4 && xhr.status === 200){
+                    var response = JSON.parse(xhr.responseText);
+                    if(response.data && response.data.length){
+                        render(response.data);
+                    }
+                }
+            }
+        }
+        
+        function render(data){
+            var frag = document.createDocumentFragment(),
+                target
+            ;
+            data.forEach(item => {
+                var div = document.createElement('div');
+                target = item.target;
+                div.innerHTML =  '<a herf="' + target.link.url + '">' + '<span class="hot">' + target.metrics_area.text + '</span>   ' +  target.title_area.text + '</a>';
+                frag.appendChild(div); 
+            })
+            document.body.appendChild(frag);
+        }
+    </script>
+</body>
+</html>
