@@ -98,6 +98,41 @@
         header .pic-switch.open .icon{
             width: 30px;
         }
+        header .switch{
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            right: 180px;
+            top: 20px;
+            z-index: 10;
+            cursor: pointer;
+        }
+        header .switch img{
+            width: 40px;
+            height: 40px;
+            animation: rotate 1.5s ease-in-out infinite;
+        }
+        @keyframes rotate{
+            0%{
+                transform: rotate(0deg);
+            }
+            100%{
+                transform: rotate(360deg);
+            }
+        }
+        header .switch .zhizhu{
+            --w: 6px;
+            --h: 70px;
+            /* content: ''; */
+            position: absolute;
+            left: 17px;
+            top: 20px;
+            width: var(--w);
+            height: var(--h);
+            background: #6cf;
+            border-radius: 3px;
+            z-index: -1;
+        }
         .search-list{
             margin-top: 20px;
             display: inline-block;
@@ -266,6 +301,10 @@
 <body>
     <header>
         <div class="color-setting"></div>
+        <div class="switch">
+            <img src="./fengche.png" alt="">
+            <div class="zhizhu"></div>
+        </div>
         <div class="pic-switch">
             <div class="desc">壁纸开关</div>
             <div class="icon"></div>
