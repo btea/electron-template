@@ -100,9 +100,16 @@ let book = {
 
 
 http.createServer(function(request, response){
-    let url = request.url;
+    let url = request.url, format = url.split('.'),
+        type = format[format.length - 1]
+    ;
+    if(~['png','jpg','jpeg','webp','gif'].indexOf(type)){
+        response.writeHead(200, {'Content-Type': 'text/' + type});
+        response.end(fs.readFileSync('./fengche.png'));
+    }
     if(url === '/'){
-        fs.readFile('./html/index.html', 'utf8', function(e, data){
+        response.writeHead(200, { 'Content-Type': 'text/html' });
+        fs.readFile('./zhuishu.html', 'utf8', function(e, data){
             if(e){
                 console.log(e);
             }else{
@@ -133,6 +140,7 @@ http.createServer(function(request, response){
     if(/^\/favicon/.test(url)){
         response.end('');
     }
+
 }).listen(2333);
 
 
