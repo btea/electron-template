@@ -372,6 +372,7 @@
             fontFamily: ['楷体','宋体','Franklin Gothic Medium', 'Arial Narrow', 'Arial', 'sans-serif','微软雅黑'],
             backgroundStyle: ['rgba(250,245,235,.8)','rgba(245,234,204,.8)','rgba(230,242,230,.8)','rgba(228,241,245,.8)','rgba(245,228,228,.8)','rgba(224,224,224,.8)','rgba(25,27,28,.8)'],
             initImage: 'https://i0.hdslb.com/bfs/vc/9dfc7150c762a217681677c8385475347a5b71e4.jpg@2000w_1e.webp',
+            isCanSwitch: false, /* 是否打开壁纸按钮，打开之后才能切换壁纸 */
             initElement: function(){
                 this.buttons = this.byClassElement('buttons');
                 this.prev = this.byClassElement('prev');
@@ -379,6 +380,7 @@
                 this.chaptersTitle = this.byClassElement('title');
                 this.colorSetting = this.byClassElement('color-setting');
                 this.picSwtich = this.byClassElement('pic-switch');
+                this.fengche = this.byClassElement('switch');
                 this.textContainer = this.byClassElement('text-word');
                 this.chapterBox = this.byClassElement('chapter');
                 this.randomImg = this.byClassElement('img');
@@ -431,13 +433,33 @@
                         _self.isCanSwitchImg = false;
                         this.classList.remove('open');
                         document.body.style.background = '';
+                        _self.isCanSwitch = false;
                     }else{
                         _self.isCanSwitchImg = true;
                         this.classList.add('open');
-                        document.body.style.backgroundImage = 'url("' + _self.initImage + '")';
-                        document.body.style.backgroundRepeat = 'no-repeat';
+                        _self.isCanSwitch = true;
+                        _self.showBodyImage();
                     }
                 })
+            },
+            fengcheChange: function(){
+                var _self = this;
+                this.fengche.addEventListener('click', function(){
+                    if(!_self.isCanSwitch){
+                        return;
+                    }
+                    var ele = this;
+                    ele.classList.add('rotate');
+                    setTimeout(function(){
+                        ele.classList.remove('rotate');
+                        _self.randomBg();
+                    },1500);
+
+                })
+            },
+            showBodyImage: function(){
+                document.body.style.backgroundImage = 'url("' + this.initImage + '")';
+                document.body.style.backgroundRepeat = 'no-repeat';
             },
             // 上一章/下一章切换
             switchCHapter: function(type){
@@ -620,7 +642,6 @@
                 ;
                 this.initImage = src;
                 document.body.style.backgroundImage = 'url("' + src  + '")';
-
             },
             globalEvent: function(){
                 var _self = this;
