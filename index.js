@@ -10,8 +10,6 @@ function createWindow () {
     protocol: 'file:',
     slashes: true
   }))
-  // win.loadURL('http://101.37.12.105:8098/zhdj_web/first_page.html');
- 
   win.on('closed', () => {
     win = null
   })

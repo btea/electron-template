@@ -189,7 +189,7 @@
             font-size: 0;
             width: 200px;
             position: fixed;
-            top: 100px;
+            top: 120px;
             left: 0;
             bottom: 0;
             overflow-y: auto;
@@ -270,9 +270,9 @@
             font-size: 14px;
         }
         .container .chapter .buttons{
-            position: absolute;
-            left: 0;
-            bottom: 10px;
+            /* position: absolute; */
+            /* left: 0; */
+            /* bottom: 10px; */
             width: 100%;
             text-align: center;
             display: none;
@@ -355,7 +355,7 @@
         <div class="text-up hide"></div>
     </div>
     <script>
-        // require('./zhuishu');  //electron
+        require('./zhuishu');  //electron
         document.onkeydown = function(e){
             if(e.keyCode === 13){
                 var str =  document.getElementsByClassName('search')[0].value.trim();
