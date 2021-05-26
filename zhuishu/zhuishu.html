@@ -11,12 +11,13 @@
         html,body{
             margin: 0;
             padding: 0;
-            /* height: 100%; */
+            height: 100%;
         }
         body{
             /* background: url('https://i0.hdslb.com/bfs/vc/9dfc7150c762a217681677c8385475347a5b71e4.jpg@2000w_1e.webp') no-repeat; */
             background-size: 100%;
             background-attachment: fixed;
+            position: relative;
         }
         body::-webkit-scrollbar {/*滚动条整体样式*/
             width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
@@ -24,16 +25,17 @@
         }
         body::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
             border-radius: 10px;
-            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
             background: #535353;
         }
         body::-webkit-scrollbar-track {/*滚动条里面轨道*/
-            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
             border-radius: 10px;
             background: #EDEDED;
         }
         header{
             text-align: center;
+            height: 120px;
             position: fixed;
             left: 0;
             top: 0;
@@ -42,7 +44,7 @@
         }
         header .color-setting{
             position: fixed;
-            left: 50px;
+            left: 0;
             top: 30px;
             z-index: 10;
         }
@@ -110,6 +112,8 @@
         header .switch img{
             width: 40px;
             height: 40px;
+        }
+        header .switch img.active{
             animation: rotate 1.5s ease-in-out infinite;
         }
         @keyframes rotate{
@@ -171,9 +175,12 @@
             border-color: aqua;
         }
         .container{
-            margin-top: 100px;
-            position: relative;
+            position: absolute;
+            top: 120px;
+            left: 0;
+            bottom: 0;
             width: 100%;
+            overflow: hidden;
         }
         .container .link-lists{
             margin: 0;
@@ -182,7 +189,7 @@
             font-size: 0;
             width: 200px;
             position: fixed;
-            top: 100px;
+            top: 120px;
             left: 0;
             bottom: 0;
             overflow-y: auto;
@@ -196,11 +203,11 @@
             border-radius: 3px;
             height: 20px;
             width: 6px;
-            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
             background: #6cf;
         }
         .container .link-lists::-webkit-scrollbar-track{
-            -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
             border-radius: 3px;
             width: 1px;
             background: #EDEDED;
@@ -234,10 +241,27 @@
             left: 200px;
             right: 0;
             top: 0;
+            bottom: 0;
+            overflow-x: hidden;
+            overflow-y: scroll;
             padding: 20px;
         }
+        .container .chapter::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
+            height: 1px;
+        }
+        .container .chapter::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 10px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            background: #535353;
+        }
+        .container .chapter::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            background: #EDEDED;
+        }
         .container .chapter .text-word{
-            width: 1000px;
+            width: 100%;
             margin: 0 auto;
             padding: 25px;
         }
@@ -246,6 +270,10 @@
             font-size: 14px;
         }
         .container .chapter .buttons{
+            /* position: absolute; */
+            /* left: 0; */
+            /* bottom: 10px; */
+            width: 100%;
             text-align: center;
             display: none;
         }
@@ -302,7 +330,7 @@
     <header>
         <div class="color-setting"></div>
         <div class="switch">
-            <img src="./fengche.png" alt="">
+            <img class="img" src="./fengche.png" alt="" />
             <div class="zhizhu"></div>
         </div>
         <div class="pic-switch">
@@ -327,7 +355,7 @@
         <div class="text-up hide"></div>
     </div>
     <script>
-        require('./zhuishu');
+        require('./zhuishu');  //electron
         document.onkeydown = function(e){
             if(e.keyCode === 13){
                 var str =  document.getElementsByClassName('search')[0].value.trim();
@@ -344,6 +372,7 @@
             fontFamily: ['楷体','宋体','Franklin Gothic Medium', 'Arial Narrow', 'Arial', 'sans-serif','微软雅黑'],
             backgroundStyle: ['rgba(250,245,235,.8)','rgba(245,234,204,.8)','rgba(230,242,230,.8)','rgba(228,241,245,.8)','rgba(245,228,228,.8)','rgba(224,224,224,.8)','rgba(25,27,28,.8)'],
             initImage: 'https://i0.hdslb.com/bfs/vc/9dfc7150c762a217681677c8385475347a5b71e4.jpg@2000w_1e.webp',
+            isCanSwitch: false, /* 是否打开壁纸按钮，打开之后才能切换壁纸 */
             initElement: function(){
                 this.buttons = this.byClassElement('buttons');
                 this.prev = this.byClassElement('prev');
@@ -351,10 +380,14 @@
                 this.chaptersTitle = this.byClassElement('title');
                 this.colorSetting = this.byClassElement('color-setting');
                 this.picSwtich = this.byClassElement('pic-switch');
+                this.fengche = this.byClassElement('switch');
                 this.textContainer = this.byClassElement('text-word');
+                this.chapterBox = this.byClassElement('chapter');
+                this.randomImg = this.byClassElement('img');
                 this.buttonListener();
                 this.colorChange();
                 this.bgPicSwitch();
+                this.randonImageBind();
             },
             // 通过class获取元素
             byClassElement: function(name){
@@ -397,14 +430,36 @@
                 this.picSwtich.addEventListener('click',function(){
                     list = this.classList.length;
                     if(list > 1){
+                        _self.isCanSwitchImg = false;
                         this.classList.remove('open');
                         document.body.style.background = '';
+                        _self.isCanSwitch = false;
                     }else{
+                        _self.isCanSwitchImg = true;
                         this.classList.add('open');
-                        document.body.style.backgroundImage = 'url("' + _self.initImage + '")';
-                        document.body.style.backgroundRepeat = 'no-repeat';
+                        _self.isCanSwitch = true;
+                        _self.showBodyImage();
                     }
                 })
+            },
+            fengcheChange: function(){
+                var _self = this;
+                this.fengche.addEventListener('click', function(){
+                    if(!_self.isCanSwitch){
+                        return;
+                    }
+                    var ele = this;
+                    ele.classList.add('rotate');
+                    setTimeout(function(){
+                        ele.classList.remove('rotate');
+                        _self.randomBg();
+                    },1500);
+
+                })
+            },
+            showBodyImage: function(){
+                document.body.style.backgroundImage = 'url("' + this.initImage + '")';
+                document.body.style.backgroundRepeat = 'no-repeat';
             },
             // 上一章/下一章切换
             switchCHapter: function(type){
@@ -483,6 +538,9 @@
                         xhr.send();
                         xhr.onreadystatechange = function(){
                             if(xhr.readyState === 4 && xhr.status === 200){
+                                // _self.textContainer.innerHTML = '';
+                                // _self.buttons.style.display = 'none';
+                                _self.chapterEle.scrollTo(0, 0);
                                 _self.chapters = JSON.parse(xhr.responseText).mixToc.chapters;
                                 _self.chapters.forEach(function(c){
                                     str += '<li class="chapter-name" data-link="' + c.link + '" title="' + c.title + '">' + c.title + '</li>';
@@ -555,6 +613,18 @@
                 this.textContainer.appendChild(frag);
                 this.buttons.style.display = 'block';
             },
+            randonImageBind: function(){
+                var _self = this;
+                this.randomImg.addEventListener('click', function(){
+                    if(_self.isCanSwitchImg){
+                        this.classList.add('active');
+                        setTimeout(() => {
+                            this.classList.remove('active');
+                            _self.randomBg();
+                        },1500);   
+                    }
+                });
+            },
             bilibiliPic: function(){
                 var xhr = new XMLHttpRequest(),_self = this;
                 xhr.open('get','http://localhost:2333/bili');
@@ -572,12 +642,11 @@
                 ;
                 this.initImage = src;
                 document.body.style.backgroundImage = 'url("' + src  + '")';
-
             },
             globalEvent: function(){
                 var _self = this;
                 this.toTopIcon = document.getElementsByClassName('text-up')[0];
-                document.addEventListener('scroll', function(){
+                this.chapterBox.addEventListener('scroll', function(){
                     _self.throttle(_self.isScrollHeight, 300);
                 });
                 this.toTopIcon.addEventListener('click', function(e){
@@ -589,7 +658,7 @@
                 })
             },
             backToTop: function(){
-                window.scrollTo({
+                this.chapterBox.scrollTo({
                     top: 0,
                     left: 0,
                     behavior: 'smooth'
@@ -597,7 +666,7 @@
             },
             isScrollHeight: function(){
                 var _self = book;
-                _self.scrollTop = document.documentElement.scrollTop;
+                _self.scrollTop = _self.chapterBox.scrollTop;
                 if(_self.scrollTop >= 100){
                     _self.toTopIcon.classList = 'text-up show';
                 }else{
@@ -616,8 +685,9 @@
             }
         }
         book.bilibiliPic();
-        book.globalEvent();
         book.initElement();
+        book.globalEvent();
+        
     </script>
 </body>
 </html>
