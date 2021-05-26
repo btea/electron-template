@@ -1,13 +1,29 @@
 {
-  "name": "electr",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "pack": "electron-packager . el --win --out src -arch=x64 --electronVersion 4.0.0 --overwrite --ignore=node_modules"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "electr",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "vite",
+        "start": "electron .",
+        "pack": "electron-packager . el --win --out src -arch=x64 --electronVersion 4.0.0 --overwrite --ignore=node_modules"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "electron": "^13.0.1",
+        "vue": "^3.0.11"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^4.25.0",
+        "@typescript-eslint/parser": "^4.25.0",
+        "@vitejs/plugin-vue": "^1.2.2",
+        "@vue/compiler-sfc": "^3.0.11",
+        "eslint": "^7.27.0",
+        "eslint-plugin-vue": "^7.9.0",
+        "prettier": "^2.3.0",
+        "typescript": "^4.2.4",
+        "vite": "^2.3.4"
+    }
 }
