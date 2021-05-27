@@ -4,10 +4,16 @@ const url = require('url');
 
 let win;
 function createWindow() {
-    win = new BrowserWindow({ width: 800, height: 600 });
+    win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        backgroundColor: '#6cf',
+        icon: 'assets/icon.ico'
+    });
+    win.removeMenu();
     win.loadURL(
         url.format({
-            pathname: 'http://localhost:3000/'
+            pathname: './template.html'
         })
     );
     win.on('closed', () => {
