@@ -7,15 +7,22 @@ function createWindow() {
     win = new BrowserWindow({
         width: 800,
         height: 600,
-        backgroundColor: '#6cf',
-        icon: 'assets/icon.ico'
+        // backgroundColor: 'rgba(102, 204, 255, .2)',
+        icon: 'assets/icon.ico',
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
     });
     win.removeMenu();
-    win.loadURL(
-        url.format({
-            pathname: './template.html'
-        })
-    );
+    // win.loadFile('dist/index.html');
+    win.loadURL('http://localhost:3000');
+    // win.loadURL(
+    //     url.format({
+    //         pathname: 'template.html'
+    //     })
+    // );
+    win.webContents.openDevTools();
     win.on('closed', () => {
         win = null;
     });
