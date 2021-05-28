@@ -7,6 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "vite",
         "start": "electron . --port 2233",
+        "z": "electron ./zhuishu/index.js",
         "pack": "electron-packager . el --win --out src -arch=x64 --electronVersion 4.0.0 --overwrite --ignore=node_modules"
     },
     "author": "",
