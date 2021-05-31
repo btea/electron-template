@@ -5,9 +5,9 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "vite",
+        "dev": "node start.ts",
         "build": "vite build",
-        "start": "electron . --port 2233",
+        "start": "electron .",
         "z": "electron ./zhuishu/index.js",
         "pack": "electron-packager . el --win --out src -arch=x64 --electronVersion 4.0.0 --overwrite --ignore=node_modules"
     },
