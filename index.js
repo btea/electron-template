@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const url = require('url');
+const port = 2233;
 
 let win;
 function createWindow() {
@@ -16,7 +17,7 @@ function createWindow() {
     });
     win.removeMenu();
     // win.loadFile('dist/index.html');
-    win.loadURL('http://localhost:3000');
+    win.loadURL(`http://localhost:${port}`);
     // win.loadURL(
     //     url.format({
     //         pathname: 'template.html'

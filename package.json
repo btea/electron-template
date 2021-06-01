@@ -5,9 +5,9 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "vite",
+        "dev": "node start.ts",
         "build": "vite build",
-        "start": "electron . --port 2233",
+        "start": "electron .",
         "z": "electron ./zhuishu/index.js",
         "pack": "electron-packager . el --win --out src -arch=x64 --electronVersion 4.0.0 --overwrite --ignore=node_modules"
     },
@@ -15,18 +15,27 @@
     "license": "ISC",
     "dependencies": {
         "electron": "^13.0.1",
+        "electron-packager": "^15.2.0",
         "less": "^4.1.1",
         "vue": "^3.0.11"
     },
     "devDependencies": {
+        "@commitlint/cli": "^12.1.4",
+        "@commitlint/config-conventional": "^12.1.4",
         "@typescript-eslint/eslint-plugin": "^4.25.0",
         "@typescript-eslint/parser": "^4.25.0",
         "@vitejs/plugin-vue": "^1.2.2",
         "@vue/compiler-sfc": "^3.0.11",
         "eslint": "^7.27.0",
         "eslint-plugin-vue": "^7.9.0",
+        "husky": "^6.0.0",
         "prettier": "^2.3.0",
         "typescript": "^4.2.4",
         "vite": "^2.3.4"
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+        }
     }
 }
