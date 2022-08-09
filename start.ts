@@ -14,7 +14,7 @@ const port = 2233;
         plugins: [vue()]
     });
     await server.listen();
-    exec('npm run start');
+    exec('pnpm run start');
 })();
 
 module.exports = {
