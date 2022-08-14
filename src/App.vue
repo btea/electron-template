@@ -10,13 +10,13 @@
         class="menu"
         v-for="(m, i) in menus.slice(1)"
         :key="m"
-        @click="selectMenu(i + 1, m)"
+        @click="selectMenu(i + 1)"
       >
         \{{ m }}
       </div>
     </div>
     <ul>
-      <li v-for="f in files" :key="f" class="item">
+      <li v-for="(f,i) in files" :key="i" class="item">
         <span
           :class="['val', { directory: f.isDirectory }]"
           @click="findMore(f)"
@@ -26,98 +26,90 @@
     </ul>
   </div>
 </template>
-<script >
-import { defineComponent, onMounted, reactive, ref } from 'vue';
+<script setup lang="ts">
+import { onMounted, reactive, ref } from 'vue';
 
-export default defineComponent({
-  setup() {
-    const startFind = (disk) => {
-      files.length = 0;
-      const directory = disk.split('\\');
-      menus.push(directory[directory.length - 1]);
-      linkMenu(disk);
-    };
-    const inputDisk = ref('G');
-    let files = reactive([]);
-    const findFile = () => {
-      const _disk = inputDisk.value.trim().toUpperCase();
-      if (!_disk) {
-        return;
-      }
-      if (_disk < 'A' || _disk > 'Z') {
-        return;
-      }
-      const disk = inputDisk.value + ':\\';
-      startFind(disk);
-      menus.length = 0;
-      menus.push(disk);
-    };
-    const findMore = (file) => {
-      if (!file.isDirectory) {
-        return;
-      }
-      const path = file.parent + '\\' + file.name;
-      startFind(path);
-    };
+type file = {
+  name: string,
+  isDirectory: boolean,
+  parent: string
+}
 
-    // 添加导航菜单
-    let menus = reactive([]);
-    const linkMenu = (disk) => {
-      const fs = require('fs');
-      const path = require('path');
-      if (!fs.existsSync(disk)) {
-        console.log('该路径不存在');
-        return;
-      }
-      if (fs.lstatSync(disk).isDirectory()) {
-        let _files = fs.readdirSync(disk);
-        const _list = [];
-        for (let f of _files) {
-          try {
-            const _p = path.join(disk, f);
-            const isDirectory = fs.lstatSync(_p).isDirectory();
-            const _o = {
-              name: f,
-              isDirectory: isDirectory,
-              parent: disk,
-            };
-            // _list.push(_o);
-            files.push(_o);
-          } catch (error) {}
-        }
-      } else {
-        console.log(disk);
-      }
-    };
-    const selectMenu = (index, name) => {
-      if (index === 0) {
-        findFile();
-      } else {
-        let _m = menus.slice(0, index + 1);
-        if (_m.length === menus.length) {
-          return;
-        }
-        menus.length = 0;
-        menus.push(..._m);
-        const disk = menus.join('\\');
-        linkMenu(disk);
-      }
-    };
+// 添加导航菜单
+const menus = reactive<string[]>([]);
+const startFind = (disk: string) => {
+  files.length = 0;
+  const directory = disk.split('\\');
+  menus.push(directory.slice(-1)[0]);
+  linkMenu(disk);
+};
+const inputDisk = ref('G');
+const files = reactive<file[]>([]);
+const findFile = () => {
+  const _disk = inputDisk.value.trim().toUpperCase();
+  if (!_disk) {
+    return;
+  }
+  if (_disk < 'A' || _disk > 'Z') {
+    return;
+  }
+  const disk = inputDisk.value + ':\\';
+  startFind(disk);
+  menus.length = 0;
+  menus.push(disk);
+};
+const findMore = (file: file) => {
+  if (!file.isDirectory) {
+    return;
+  }
+  const path = file.parent + '\\' + file.name;
+  startFind(path);
+};
 
-    onMounted(() => {
+const linkMenu = (disk: string) => {
+  const fs = require('fs');
+  const path = require('path');
+  if (!fs.existsSync(disk)) {
+    console.log('该路径不存在');
+    return;
+  }
+  if (fs.lstatSync(disk).isDirectory()) {
+    let _files = fs.readdirSync(disk);
+    for (let f of _files) {
+      try {
+        const _p = path.join(disk, f);
+        const isDirectory = fs.lstatSync(_p).isDirectory();
+        const _o = {
+          name: f,
+          isDirectory: isDirectory,
+          parent: disk,
+        };
+        files.push(_o);
+      } catch (error) {}
+    }
+  } else {
+    console.log(disk);
+  }
+};
+const selectMenu = (index: number) => {
+  if (index === 0) {
+    findFile();
+  } else {
+    let _m = menus.slice(0, index + 1);
+    if (_m.length === menus.length) {
+      return;
+    }
+    menus.length = 0;
+    menus.push(..._m);
+    const disk = menus.join('\\');
+    linkMenu(disk);
+  }
+};
+
+onMounted(() => {
       console.log(123);
-    });
-
-    return {
-      findFile,
-      files,
-      findMore,
-      menus,
-      selectMenu,
-      inputDisk,
-    };
-  },
 });
+
 </script>
 <style lang="less" scoped>
 .disk {
