@@ -4,6 +4,9 @@
       <input type="text" class="disk" v-model="inputDisk" />
     </div>
     <div @click="findFile" class="search">查询</div>
+    <div class="link">
+      <input type="text" placeholder="请输入视频地址" />
+    </div>
     <div class="menus">
       <div class="menu" @click="selectMenu(0)">{{ menus[0] }}</div>
       <div class="menu" v-for="(m, i) in menus.slice(1)" :key="m" @click="selectMenu(i + 1)">\{{ m }}</div>
