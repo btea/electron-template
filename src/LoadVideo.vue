@@ -3,11 +3,11 @@ import { ref } from 'vue'
 // import { getDonwloadUrl, downloadBFile } from './utils/link'
 
 type Link = {
-  url: string,
-  type: 'video' | 'audio',
-  text: string,
-  title: string,
-  progress?: string,
+  url: string
+  type: 'video' | 'audio'
+  text: string
+  title: string
+  progress?: string
 }
 
 const link = ref('https://www.bilibili.com/video/BV1KZ4y1e7cG?vd_source=29a1ec123bcf2daca305150b5b3a6a6b')
@@ -42,7 +42,6 @@ const startLoad = async (l: Link) => {
   const render = require('electron').ipcRenderer
   const load = await render.invoke('link:LoadContent', link.value)
 }
-
 </script>
 <template>
   <div class="head">
@@ -51,7 +50,7 @@ const startLoad = async (l: Link) => {
   </div>
   <div class="main">
     <div class="btn" v-for="(link, index) in links" :key="index" @click="startLoad(link)">
-      {{link.text}}
+      {{ link.text }}
     </div>
   </div>
 </template>
@@ -74,15 +73,15 @@ const startLoad = async (l: Link) => {
     margin-right: 15px;
   }
 }
-  .btn {
-    width: 100px;
-    height: 35px;
-    background: #6cf;
-    border-radius: 5px;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
+.btn {
+  width: 100px;
+  height: 35px;
+  background: #6cf;
+  border-radius: 5px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
 </style>
