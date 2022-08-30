@@ -1,12 +1,18 @@
 const { app, BrowserWindow, ipcMain, contextBridge, ipcRenderer } = require('electron')
-const { getDonwloadUrl } = require('./src/utils/getLink')
+const { getDonwloadUrl, downloadBFile } = require('./src/utils/getLink')
 const path = require('path')
 const url = require('url')
 const port = 2233
 
-const getLink = link => {
-  return getDonwloadUrl('https://www.bilibili.com/video/BV1KZ4y1e7cG?vd_source=29a1ec123bcf2daca305150b5b3a6a6b')
-  // return getDonwloadUrl(link[0])
+const getLink = (event, link) => {
+  return getDonwloadUrl(link)
+}
+const percentFn = (v) => {
+  console.log(v)
+  win.webContents.send('percent', v)
+}
+const loadBlob = (event, url, title) => {
+  return downloadBFile(url, title, percentFn)
 }
 
 let win
@@ -19,7 +25,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
-      preload: './preload.js'
+      // preload: './preload.js'
     }
   })
   win.removeMenu()
@@ -35,6 +41,7 @@ function createWindow() {
     win = null
   })
   ipcMain.handle('link:GetLink', getLink)
+  ipcMain.handle('link:LoadContent', loadBlob)
 }
 
 app.on('ready', createWindow)

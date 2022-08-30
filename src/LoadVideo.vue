@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 // import { getDonwloadUrl, downloadBFile } from './utils/link'
 
 type Link = {
@@ -36,11 +36,22 @@ const getSource = async () => {
     })
   }
 }
+  
+const render = require('electron').ipcRenderer
 const links = ref<Link[]>([])
+const progress = ref('')
+const percentFn = (message: any, v: any) => {
+  progress.value = (v * 100).toFixed(2) + '%'
+}
+const progressStyle = computed(() => ({
+  width: progress.value
+}))
+render.on('percent', percentFn)
 const startLoad = async (l: Link) => {
-  const { url } = l
-  const render = require('electron').ipcRenderer
-  const load = await render.invoke('link:LoadContent', link.value)
+  const { url, title } = l
+  console.log(url, title)
+  const load = await render.invoke('link:LoadContent', url, title)
+
 }
 </script>
 <template>
@@ -52,6 +63,12 @@ const startLoad = async (l: Link) => {
     <div class="btn" v-for="(link, index) in links" :key="index" @click="startLoad(link)">
       {{ link.text }}
     </div>
+  </div>
+  <div class="progress">
+    <div class="bar">
+      <span class="cur" :style="progressStyle"></span>
+    </div>
+    <div class="val">{{progress}}</div>
   </div>
 </template>
 <style lang="less" scoped>
@@ -83,5 +100,28 @@ const startLoad = async (l: Link) => {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+.progress {
+  display: flex;
+  align-items: center;
+  .bar {
+    flex: 1;
+    height: 10px;
+    border-radius: 5px;
+    background: rgba(102, 204, 255, .2);
+    position: relative;
+    overflow: hidden;
+    .cur {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 10px;
+      background: aqua;
+    }
+  }
+  .val {
+    width: 80px;
+    text-align: right;
+  }
 }
 </style>
