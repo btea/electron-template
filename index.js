@@ -7,7 +7,7 @@ const port = 2233
 const getLink = (event, link) => {
   return getDonwloadUrl(link)
 }
-const percentFn = (v) => {
+const percentFn = v => {
   console.log(v)
   win.webContents.send('percent', v)
 }
@@ -24,7 +24,7 @@ function createWindow() {
     icon: 'assets/icon.ico',
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: false
       // preload: './preload.js'
     }
   })

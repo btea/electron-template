@@ -36,7 +36,7 @@ const getSource = async () => {
     })
   }
 }
-  
+
 const render = require('electron').ipcRenderer
 const links = ref<Link[]>([])
 const progress = ref('')
@@ -51,7 +51,6 @@ const startLoad = async (l: Link) => {
   const { url, title } = l
   console.log(url, title)
   const load = await render.invoke('link:LoadContent', url, title)
-
 }
 </script>
 <template>
@@ -68,7 +67,7 @@ const startLoad = async (l: Link) => {
     <div class="bar">
       <span class="cur" :style="progressStyle"></span>
     </div>
-    <div class="val">{{progress}}</div>
+    <div class="val">{{ progress }}</div>
   </div>
 </template>
 <style lang="less" scoped>
@@ -108,7 +107,7 @@ const startLoad = async (l: Link) => {
     flex: 1;
     height: 10px;
     border-radius: 5px;
-    background: rgba(102, 204, 255, .2);
+    background: rgba(102, 204, 255, 0.2);
     position: relative;
     overflow: hidden;
     .cur {
