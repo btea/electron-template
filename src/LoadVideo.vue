@@ -58,7 +58,7 @@ const startLoad = async (l: Link) => {
   } else {
     suffix = '.mp4'
   }
-  const u = saveUrl.value.replace(/\\/g, '/') + `${title}${suffix}`
+  const u = saveUrl.value.replace(/\\/g, '/') + `/${title}${suffix}`
   const load = await render.invoke('link:LoadContent', url, u)
 }
 
@@ -156,6 +156,12 @@ render.on('selectPosition', (message: any, v: string[]) => {
       width: 80px;
       text-align: right;
     }
+  }
+}
+.select-path {
+  .save {
+    margin-top: 5px;
+    color: aqua;
   }
 }
 </style>
