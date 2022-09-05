@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, contextBridge, ipcRenderer } = require('electron')
+const { app, BrowserWindow, ipcMain, contextBridge, ipcRenderer, dialog } = require('electron')
 const { getDonwloadUrl, downloadBFile } = require('./src/utils/getLink')
 const path = require('path')
 const url = require('url')
@@ -8,11 +8,19 @@ const getLink = (event, link) => {
   return getDonwloadUrl(link)
 }
 const percentFn = v => {
-  console.log(v)
   win.webContents.send('percent', v)
 }
-const loadBlob = (event, url, title) => {
-  return downloadBFile(url, title, percentFn)
+/**
+ * @params url { audio/video source }
+ * @params pos { file save position }
+ * 
+*/
+const loadBlob = (event, url, pos) => {
+  return downloadBFile(url, pos, percentFn)
+}
+const selectPosition = () => {
+  const urls = dialog.showOpenDialogSync({properties: ['openDirectory']})
+  win.webContents.send('selectPosition', urls)
 }
 
 let win
@@ -31,17 +39,13 @@ function createWindow() {
   win.removeMenu()
   // win.loadFile('dist/index.html');
   win.loadURL(`http://localhost:${port}`)
-  // win.loadURL(
-  //     url.format({
-  //         pathname: 'template.html'
-  //     })
-  // );
   win.webContents.openDevTools()
   win.on('closed', () => {
     win = null
   })
   ipcMain.handle('link:GetLink', getLink)
   ipcMain.handle('link:LoadContent', loadBlob)
+  ipcMain.handle('selectPosition', selectPosition)
 }
 
 app.on('ready', createWindow)

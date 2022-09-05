@@ -1,5 +1,7 @@
 import axios from 'axios'
 import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
 
 export const getDonwloadUrl = (url: string) => {
   return axios
@@ -54,4 +56,12 @@ export const downloadBFile = (url: string, fullFileName: string, progressCallbac
         )
       })
     })
+}
+
+export const isWindows = os.platform() === 'win32'
+export function normalizePath(id: string): string {
+  return path.posix.normalize(isWindows ? slash(id) : id)
+}
+export function slash(p: string): string {
+  return p.replace(/\\/g, '/')
 }

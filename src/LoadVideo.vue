@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-// import { getDonwloadUrl, downloadBFile } from './utils/link'
 
 type Link = {
   url: string
@@ -10,13 +9,13 @@ type Link = {
   progress?: string
 }
 
+const render = require('electron').ipcRenderer
 const link = ref('https://www.bilibili.com/video/BV1KZ4y1e7cG?vd_source=29a1ec123bcf2daca305150b5b3a6a6b')
 const getSource = async () => {
   if (!link.value) {
     alert('请输入链接')
     return
   }
-  const render = require('electron').ipcRenderer
   const info = await render.invoke('link:GetLink', link.value)
   links.value.length = 0
   if (info.videoUrl) {
@@ -37,7 +36,6 @@ const getSource = async () => {
   }
 }
 
-const render = require('electron').ipcRenderer
 const links = ref<Link[]>([])
 const progress = ref('')
 const percentFn = (message: any, v: any) => {
@@ -47,11 +45,29 @@ const progressStyle = computed(() => ({
   width: progress.value
 }))
 render.on('percent', percentFn)
+const saveUrl = ref('')
 const startLoad = async (l: Link) => {
-  const { url, title } = l
-  console.log(url, title)
-  const load = await render.invoke('link:LoadContent', url, title)
+  if (!saveUrl.value) {
+    console.log('请选择存储位置')
+    return
+  }
+  const { url, title, type } = l
+  let suffix = ''
+  if (type === 'audio') {
+    suffix = '.mp3'
+  } else {
+    suffix = '.mp4'
+  }
+  const u = saveUrl.value.replace(/\\/g, '/') + `${title}${suffix}`;
+  const load = await render.invoke('link:LoadContent', url , u)
 }
+
+const selectPosition = () => {
+  render.invoke('selectPosition')
+}
+render.on('selectPosition', (message: any, v: string[]) => {
+  saveUrl.value = v[0]
+})
 </script>
 <template>
   <div class="head">
@@ -63,12 +79,22 @@ const startLoad = async (l: Link) => {
       {{ link.text }}
     </div>
   </div>
-  <div class="progress">
-    <div class="bar">
-      <span class="cur" :style="progressStyle"></span>
-    </div>
-    <div class="val">{{ progress }}</div>
+  <div class="select-path">
+    <div class="btn" @click="selectPosition">选择存储位置</div>
+    <div class="save" v-show="saveUrl">{{saveUrl}}</div>
   </div>
+  <div class="load-list">
+    <div class="item">
+      <div class="progress">
+        <div class="bar">
+          <span class="cur" :style="progressStyle"></span>
+        </div>
+        <div class="val">{{ progress }}</div>
+      </div>
+      <div class="ope btn">停止</div>
+    </div>
+  </div>
+  
 </template>
 <style lang="less" scoped>
 .head {
@@ -84,7 +110,7 @@ const startLoad = async (l: Link) => {
 }
 .main {
   display: flex;
-  margin-top: 20px;
+  margin: 20px 0;
   .btn {
     margin-right: 15px;
   }
@@ -100,27 +126,37 @@ const startLoad = async (l: Link) => {
   justify-content: center;
   cursor: pointer;
 }
-.progress {
-  display: flex;
-  align-items: center;
-  .bar {
-    flex: 1;
-    height: 10px;
-    border-radius: 5px;
-    background: rgba(102, 204, 255, 0.2);
-    position: relative;
-    overflow: hidden;
-    .cur {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 10px;
-      background: aqua;
-    }
+.load-list {
+  .item {
+    display: flex;
+    margin-bottom: 20px;
   }
-  .val {
-    width: 80px;
-    text-align: right;
+  .ope {
+    width: 100px;
+  }
+  .progress {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    .bar {
+      flex: 1;
+      height: 10px;
+      border-radius: 5px;
+      background: rgba(102, 204, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      .cur {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 10px;
+        background: aqua;
+      }
+    }
+    .val {
+      width: 80px;
+      text-align: right;
+    }
   }
 }
 </style>
