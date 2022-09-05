@@ -13,13 +13,13 @@ const percentFn = v => {
 /**
  * @params url { audio/video source }
  * @params pos { file save position }
- * 
-*/
+ *
+ */
 const loadBlob = (event, url, pos) => {
   return downloadBFile(url, pos, percentFn)
 }
 const selectPosition = () => {
-  const urls = dialog.showOpenDialogSync({properties: ['openDirectory']})
+  const urls = dialog.showOpenDialogSync({ properties: ['openDirectory'] })
   win.webContents.send('selectPosition', urls)
 }
 

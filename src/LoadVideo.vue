@@ -58,8 +58,8 @@ const startLoad = async (l: Link) => {
   } else {
     suffix = '.mp4'
   }
-  const u = saveUrl.value.replace(/\\/g, '/') + `${title}${suffix}`;
-  const load = await render.invoke('link:LoadContent', url , u)
+  const u = saveUrl.value.replace(/\\/g, '/') + `${title}${suffix}`
+  const load = await render.invoke('link:LoadContent', url, u)
 }
 
 const selectPosition = () => {
@@ -81,7 +81,7 @@ render.on('selectPosition', (message: any, v: string[]) => {
   </div>
   <div class="select-path">
     <div class="btn" @click="selectPosition">选择存储位置</div>
-    <div class="save" v-show="saveUrl">{{saveUrl}}</div>
+    <div class="save" v-show="saveUrl">{{ saveUrl }}</div>
   </div>
   <div class="load-list">
     <div class="item">
@@ -94,7 +94,6 @@ render.on('selectPosition', (message: any, v: string[]) => {
       <div class="ope btn">停止</div>
     </div>
   </div>
-  
 </template>
 <style lang="less" scoped>
 .head {
