@@ -40,6 +40,9 @@ const links = ref<Link[]>([])
 const progress = ref('')
 const percentFn = (message: any, v: any) => {
   progress.value = (v * 100).toFixed(2) + '%'
+  if (progress.value === '100.00%') {
+    progress.value = '完成'
+  }
 }
 const progressStyle = computed(() => ({
   width: progress.value
@@ -102,7 +105,7 @@ render.on('selectPosition', (message: any, v: string[]) => {
   .link {
     height: 35px;
     border-radius: 5px;
-    border: 1px solid #6cf;
+    border: 1px solid var(--base-color);
     padding: 10px;
     flex: 1;
   }
@@ -115,14 +118,16 @@ render.on('selectPosition', (message: any, v: string[]) => {
   }
 }
 .btn {
-  width: 100px;
+  min-width: 80px;
   height: 35px;
-  background: #6cf;
+  background: var(--base-color);
   border-radius: 5px;
   color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 35px;
+  padding: 0 10px;
   cursor: pointer;
 }
 .load-list {
@@ -141,7 +146,7 @@ render.on('selectPosition', (message: any, v: string[]) => {
       flex: 1;
       height: 10px;
       border-radius: 5px;
-      background: rgba(102, 204, 255, 0.2);
+      background: var(--base-color-bg);
       position: relative;
       overflow: hidden;
       .cur {
@@ -149,19 +154,20 @@ render.on('selectPosition', (message: any, v: string[]) => {
         left: 0;
         top: 0;
         height: 10px;
-        background: aqua;
+        background: var(--bar-color);
       }
     }
     .val {
       width: 80px;
       text-align: right;
+      color: var(--bar-color);
     }
   }
 }
 .select-path {
   .save {
     margin-top: 5px;
-    color: aqua;
+    color: var(--bar-color);
   }
 }
 </style>

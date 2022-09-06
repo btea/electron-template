@@ -9,3 +9,8 @@ li {
 #app {
     padding: 20px;
 }
+:root {
+    --base-color: #6cf;
+    --base-color-bg: rgba(102, 204, 255, .2);
+    --bar-color: aqua;
+}
