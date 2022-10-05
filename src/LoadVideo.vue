@@ -79,7 +79,7 @@ render.on('selectPosition', (message: any, v: string[]) => {
     <input type="text" class="link" v-model="link" placeholder="请输入链接" />
     <div class="btn" @click="getSource">获取</div>
   </div>
-  <div class="title">{{title}}</div>
+  <div class="title">{{ title }}</div>
   <div class="main">
     <div class="btn" v-for="(link, index) in links" :key="index" @click="startLoad(link)">
       {{ link.text }}
