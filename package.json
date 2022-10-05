@@ -1,7 +1,7 @@
 {
   "name": "electron-template",
   "version": "1.0.0",
-  "description": "",
+  "description": "load video",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,18 +9,26 @@
     "lint": "eslint . --ext .js,.ts,.json,.vue --fix",
     "dev": "node start.ts",
     "build": "vite build",
-    "start": "electron .",
-    "pack": "electron-packager . el --win --out src -arch=x64 --electronVersion 4.0.0 --overwrite --ignore=node_modules"
+    "start": "electron-forge start",
+    "pack": "electron-packager . el --win --out src -arch=x64 --electronVersion 4.0.0 --overwrite --ignore=node_modules",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
-  "author": "",
+  "author": "btea",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
+    "electron-squirrel-startup": "^1.0.0",
     "vue": "^3.2.37"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
     "@commitlint/config-conventional": "^17.0.3",
+    "@electron-forge/cli": "^6.0.0-beta.66",
+    "@electron-forge/maker-deb": "^6.0.0-beta.66",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.66",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.66",
+    "@electron-forge/maker-zip": "^6.0.0-beta.66",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "@vitejs/plugin-vue": "^3.0.1",
@@ -46,5 +54,32 @@
       "prettier --write",
       "eslint --cache --fix"
     ]
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "electron_template"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }
