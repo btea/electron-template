@@ -18,6 +18,7 @@ const getSource = async () => {
   }
   const info = await render.invoke('link:GetLink', link.value)
   links.value.length = 0
+  title.value = info.title
   if (info.videoUrl) {
     links.value.push({
       url: info.videoUrl,
@@ -38,6 +39,7 @@ const getSource = async () => {
 
 const links = ref<Link[]>([])
 const progress = ref('')
+const title = ref('')
 const percentFn = (message: any, v: any) => {
   progress.value = (v * 100).toFixed(2) + '%'
   if (progress.value === '100.00%') {
@@ -77,6 +79,7 @@ render.on('selectPosition', (message: any, v: string[]) => {
     <input type="text" class="link" v-model="link" placeholder="请输入链接" />
     <div class="btn" @click="getSource">获取</div>
   </div>
+  <div class="title">{{title}}</div>
   <div class="main">
     <div class="btn" v-for="(link, index) in links" :key="index" @click="startLoad(link)">
       {{ link.text }}
@@ -94,13 +97,13 @@ render.on('selectPosition', (message: any, v: string[]) => {
         </div>
         <div class="val">{{ progress }}</div>
       </div>
-      <div class="ope btn">停止</div>
+      <!-- <div class="ope btn">停止</div> -->
     </div>
   </div>
 </template>
 <style lang="less" scoped>
 .head {
-  margin: 20px;
+  margin-top: 20px;
   display: flex;
   .link {
     height: 35px;
@@ -130,7 +133,12 @@ render.on('selectPosition', (message: any, v: string[]) => {
   padding: 0 10px;
   cursor: pointer;
 }
+.title {
+  margin-top: 10px;
+  font-size: 16px;
+}
 .load-list {
+  margin-top: 10px;
   .item {
     display: flex;
     margin-bottom: 20px;
@@ -159,7 +167,7 @@ render.on('selectPosition', (message: any, v: string[]) => {
     }
     .val {
       width: 80px;
-      text-align: right;
+      text-align: center;
       color: var(--bar-color);
     }
   }
