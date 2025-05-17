@@ -19,7 +19,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 
 type file = {
   name: string
@@ -97,10 +97,6 @@ const selectMenu = (index: number) => {
     linkMenu(disk)
   }
 }
-
-onMounted(() => {
-  console.log(123)
-})
 </script>
 <style lang="less" scoped>
 .disk {

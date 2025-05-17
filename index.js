@@ -39,7 +39,7 @@ function createWindow() {
   win.removeMenu()
   // win.loadFile('dist/index.html');
   win.loadURL(`http://localhost:${port}`)
-  win.webContents.openDevTools()
+  win.webContents.openDevTools() // 打开开发者工具
   win.on('closed', () => {
     win = null
   })
